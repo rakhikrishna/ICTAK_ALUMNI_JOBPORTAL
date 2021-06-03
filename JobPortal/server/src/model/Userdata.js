@@ -10,7 +10,6 @@ const UserSchema =  new Schema({
     email: String,
     dob: Date,
     phone: String,
-
     password: String,
     college: String,
     qualification: String,

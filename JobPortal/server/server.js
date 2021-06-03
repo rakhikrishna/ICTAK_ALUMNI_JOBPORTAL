@@ -135,6 +135,36 @@ app.get('/getjoblist',function(req,res){
                     console.log(Jobdata._id);
     });
 
+    app.get('/getjoblist/:id', function(req, res) {
+        console.log("inside job",req.params.id)
+        const id = req.params.id;
+        Jobdata.findOne({"_id":id})
+      .then((job)=>{
+          res.send(job);
+      });
+  });
+  app.post('/updateJob/:id',function(req,res){
+    console.log('UPDATING',req.body);
+     id = req.params.id;
+    var update = Jobdata.findByIdAndUpdate(id,{
+        post:req.body.post,
+        company:req.body.company,
+        location: req.body.location,
+        education: req.body.education,
+        skills: req.body.skills,
+        experience: req.body.experience,
+        roles: req.body.roles,
+        emptype: req.body.emptype,
+        salary: req.body.salary
+    });
+  
+    update.exec(function (err,data){
+      if(err) throw err;
+      res.send('updated');
+    })
+  });
+    
+
 app.post('/upload',function(req,res){
     console.log("hello");
     Jobdata.create({
@@ -155,6 +185,27 @@ app.post('/upload',function(req,res){
     }
     )
 })
+
+
+// delete job post
+app.get('/deletepost/:id',function(req,res){
+    console.log("inside job post delete ")
+    id=req.params.id;
+    console.log(id);
+    Jobdata.deleteOne({_id: req.params.id})
+    .then(
+        () => {
+          res.status(200).json({
+            message: 'Deleted!'
+          });
+        })
+      .catch(
+        (error) => {
+          res.status(400).json({
+            error: error
+          });
+        }) 
+         });
 
 // employee data
 app.post('/registeremp',function(req,res){
